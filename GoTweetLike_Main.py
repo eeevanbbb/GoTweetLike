@@ -4,7 +4,7 @@
 import tweepy
 import time
 from FetchTweets import tweets_for_username
-from AnalyzeText import random_string_with_length
+from AnalyzeText import generate_tweet_with_max_char_length
 
 print "Server start at " + str(time.clock())
 
@@ -45,8 +45,9 @@ class MyStreamListener(tweepy.StreamListener):
 					username_to_tweet_like = user_to_tweet_like["screen_name"]
 					
 					#Generate and send tweet
+					max_chars = 140 - (len(tweeter_screen_name) + len(username_to_tweet_like) + 5)
 					tweets = tweets_for_username(username_to_tweet_like,api)
-					new_tweet = random_string_with_length(15,tweets)
+					new_tweet = generate_tweet_with_max_char_length(max_chars,tweets)
 					full_tweet = "@%s @%s: %s" % (tweeter_screen_name, username_to_tweet_like, new_tweet)
 					api.update_status(status=full_tweet)
 					

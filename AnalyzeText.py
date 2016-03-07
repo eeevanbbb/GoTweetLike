@@ -86,3 +86,21 @@ def get_starting_word_histagram(tweets):
 def random_string_with_length(length,tweets):
 	seed = choice_from_weighted_dict(get_starting_word_histagram(tweets))
 	return random_string_from_seed_with_length(seed,length,tweets)
+	
+def generate_tweet_with_max_char_length_and_seed(char_length,seed,tweets):
+	string = seed
+	should_continue = True
+	last_word = seed
+	next_word = get_next_word(last_word,tweets)
+	while len(string) + len(next_word) + 1 <= char_length and should_continue:
+		if next_word != "":
+			string += " "
+			string += next_word
+			last_word = next_word
+		else:
+			should_continue = False
+	return string
+	
+def generate_tweet_with_max_char_length(char_length,tweets):
+	seed = choice_from_weighted_dict(get_starting_word_histagram(tweets))
+	return generate_tweet_with_max_char_length_and_seed(chat_length,seed,tweets)
