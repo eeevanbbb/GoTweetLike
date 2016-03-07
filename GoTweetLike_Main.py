@@ -5,6 +5,8 @@ import tweepy
 import time
 from FetchTweets import tweets_for_username
 from AnalyzeText import generate_tweet_with_max_char_length
+from AnalyzeText import generate_tweet_with_max_char_length_and_seed
+from RequestParser import get_tweet_type
 
 print "Server start at " + str(time.clock())
 
@@ -47,11 +49,27 @@ class MyStreamListener(tweepy.StreamListener):
 					#Generate and send tweet
 					max_chars = 140 - (len(tweeter_screen_name) + len(username_to_tweet_like) + 5)
 					tweets = tweets_for_username(username_to_tweet_like,api)
-					new_tweet = generate_tweet_with_max_char_length(max_chars,tweets)
-					full_tweet = "@%s @%s: %s" % (tweeter_screen_name, username_to_tweet_like, new_tweet)
-					api.update_status(status=full_tweet,in_reply_to_status_id=status.id)
+					tweet_type = get_tweet_type(status.text)
+					if tweet_type == "Invalid":
+						print "Invalid Request"
+					else:
+						new_tweet = "If you're seeing this text, something is wrong."
+						if tweet_type == "Standard":
+							new_tweet = generate_tweet_with_max_char_length(max_chars,tweets)
+						elif tweet_type.startswith("Topic:"):
+							topic = tweet_type.split()[1]
+							new_tweet = generate_tweet_with_max_char_length_and_seed(max_chars,topic,tweets)
+							if new_tweet == topic:
+								#The topic was not in the frequency table
+								new_tweet = "I have nothing to say about " + topic
+						elif tweet_type == "Stats":
+							new_tweet = "Stats are not yet supported. Stay tuned!"
+							
+							
+						full_tweet = "@%s @%s: %s" % (tweeter_screen_name, username_to_tweet_like, new_tweet)
+						api.update_status(status=full_tweet,in_reply_to_status_id=status.id)
 					
-					print "Tweeting: %s" % full_tweet
+						print "Tweeting: %s" % full_tweet
 				
 			
 			
