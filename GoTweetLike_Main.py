@@ -49,7 +49,7 @@ class MyStreamListener(tweepy.StreamListener):
 					tweets = tweets_for_username(username_to_tweet_like,api)
 					new_tweet = generate_tweet_with_max_char_length(max_chars,tweets)
 					full_tweet = "@%s @%s: %s" % (tweeter_screen_name, username_to_tweet_like, new_tweet)
-					api.update_status(status=full_tweet)
+					api.update_status(status=full_tweet,in_reply_to_status_id=status.id)
 					
 					print "Tweeting: %s" % full_tweet
 				
