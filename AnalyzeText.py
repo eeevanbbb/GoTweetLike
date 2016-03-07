@@ -97,6 +97,7 @@ def generate_tweet_with_max_char_length_and_seed(char_length,seed,tweets):
 			string += " "
 			string += next_word
 			last_word = next_word
+			next_word = get_next_word(last_word,tweets)
 		else:
 			should_continue = False
 	return string
