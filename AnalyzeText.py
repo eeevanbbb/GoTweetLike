@@ -10,7 +10,7 @@ control_string = "***///END///***"
 def get_successor_histagram(tweets):
 	dict = {}
 	for tweet in tweets:
-		rgx = re.compile("(#*\w[\w']*\w|\w).?")
+		rgx = re.compile("(#*\w[\w']*\w\.?|\w\.?)")
 		words = rgx.findall(tweet)
 		for i in range(0,len(words)):
 			word = words[i]
