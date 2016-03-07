@@ -206,7 +206,7 @@ class MyStreamListener(tweepy.StreamListener):
 					tweets = tweets_for_username(username_to_tweet_like)
 					new_tweet = random_string_with_length(15,tweets)
 					full_tweet = "@%s @%s: %s" % (tweeter_screen_name, username_to_tweet_like, new_tweet)
-					api.update_status(full_tweet)	
+					api.update_status(status=full_tweet)	
 				
 			
 			
