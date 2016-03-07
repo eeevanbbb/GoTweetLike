@@ -52,6 +52,7 @@ class MyStreamListener(tweepy.StreamListener):
 					tweet_type = get_tweet_type(status.text)
 					if tweet_type == "Invalid":
 						print "Invalid Request"
+						api.send_direct_message(status.user.id,"Sorry, the format of your tweet was invalid. Please see the usage instructions. If there are no usage instructions yet, be patient. I'm still in development!")
 					else:
 						new_tweet = "If you're seeing this text, something is wrong."
 						if tweet_type == "Standard":
