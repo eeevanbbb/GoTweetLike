@@ -103,4 +103,4 @@ def generate_tweet_with_max_char_length_and_seed(char_length,seed,tweets):
 	
 def generate_tweet_with_max_char_length(char_length,tweets):
 	seed = choice_from_weighted_dict(get_starting_word_histagram(tweets))
-	return generate_tweet_with_max_char_length_and_seed(chat_length,seed,tweets)
+	return generate_tweet_with_max_char_length_and_seed(char_length,seed,tweets)
