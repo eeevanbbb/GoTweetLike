@@ -38,7 +38,7 @@ already_done = []
 #Send Error Message
 def send_error_message(user_id):
 	print "Invalid Request"
-	api.send_direct_message(user_id,text="Sorry, the format of your tweet was invalid. Please see the usage instructions. If there are no usage instructions yet, be patient. I'm still in development!")
+	api.send_direct_message(user_id,text="Sorry, the format of your tweet was invalid. Please see the usage instructions here: https://github.com/eeevanbbb/GoTweetLike")
 
 #Define Listener
 class MyStreamListener(tweepy.StreamListener):
@@ -80,7 +80,8 @@ class MyStreamListener(tweepy.StreamListener):
 						api.create_friendship(tweeter_screen_name)
 						api.create_friendship(username_to_tweet_like)
 				else:
-					send_error_message(status.user.id)
+					if status.text.lower().startswith("@gotweetlike"):
+						send_error_message(status.user.id)
 				
 			
 			
