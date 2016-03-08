@@ -3,6 +3,7 @@
 
 import re
 from random import randint
+import operator
 
 control_string = "***///END///***"
 
@@ -105,3 +106,39 @@ def generate_tweet_with_max_char_length_and_seed(char_length,seed,tweets):
 def generate_tweet_with_max_char_length(char_length,tweets):
 	seed = choice_from_weighted_dict(get_starting_word_histagram(tweets))
 	return generate_tweet_with_max_char_length_and_seed(char_length,seed,tweets)
+
+
+#Stats
+def generate_simple_frequency_table(tweets):
+	table = {}
+	for tweet in tweets:
+		rgx = re.compile("(#*\w[\w']*\w\.?|\w\.?)")
+		words = rgx.findall(tweet)
+		for word in words:
+			if word not in table:
+				table[word] = 1
+			else:
+				table[word] += 1
+	return table
+	
+def get_most_frequent_word(table):
+	sorted_vals = sorted(table.items(), key=operator.itemgetter(1))
+	most_frequent = sorted_vals[-1]
+	return most_frequent[0]		
+
+def get_average_number_of_words(tweets):
+	total = 0
+	for tweet in tweets:
+		rgx = re.compile("(#*\w[\w']*\w\.?|\w\.?)")
+		words = rgx.findall(tweet)
+		total += len(words)
+	return float(total) / float(len(tweets))
+		
+
+def generate_stats_for_tweets(tweets):
+	table = generate_simple_frequency_table(tweets)
+	most_frequent_word = get_most_frequent_word(table)
+	stats_string = "From %d tweets, the most common word was \"%s\" (%d)." % (len(tweets), most_frequent_word, table[most_frequent_word])
+	stats_string += " Average %f words per tweet." % get_average_number_of_words(tweets)
+	return stats_string
+	

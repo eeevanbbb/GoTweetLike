@@ -7,6 +7,7 @@ from FetchTweets import tweets_for_username
 from AnalyzeText import generate_tweet_with_max_char_length
 from AnalyzeText import generate_tweet_with_max_char_length_and_seed
 from RequestParser import get_tweet_type
+from AnalyzeText import generate_stats_for_tweets
 
 print "Server start at " + str(time.clock())
 
@@ -68,7 +69,7 @@ class MyStreamListener(tweepy.StreamListener):
 								#The topic was not in the frequency table
 								new_tweet = "I have nothing to say about " + topic
 						elif tweet_type == "Stats":
-							new_tweet = "Stats are not yet supported. Stay tuned!"
+							new_tweet = generate_stats_for_tweets(tweets)
 							
 							
 						full_tweet = "@%s @%s: %s" % (tweeter_screen_name, username_to_tweet_like, new_tweet)
