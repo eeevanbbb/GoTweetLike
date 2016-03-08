@@ -74,8 +74,11 @@ class MyStreamListener(tweepy.StreamListener):
 							
 						full_tweet = "@%s @%s: %s" % (tweeter_screen_name, username_to_tweet_like, new_tweet)
 						api.update_status(status=full_tweet,in_reply_to_status_id=status.id)
-					
 						print "Tweeting: %s" % full_tweet
+						
+						#Follow both users
+						api.create_friendship(tweeter_screen_name)
+						api.create_friendship(username_to_tweet_like)
 				else:
 					send_error_message(status.user.id)
 				
