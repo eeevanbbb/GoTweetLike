@@ -35,9 +35,9 @@ already_done = []
 	
 
 #Send Error Message
-def send_error_message():
+def send_error_message(user_id):
 	print "Invalid Request"
-	api.send_direct_message(status.user.id,"Sorry, the format of your tweet was invalid. Please see the usage instructions. If there are no usage instructions yet, be patient. I'm still in development!")
+	api.send_direct_message(user_id,"Sorry, the format of your tweet was invalid. Please see the usage instructions. If there are no usage instructions yet, be patient. I'm still in development!")
 
 #Define Listener
 class MyStreamListener(tweepy.StreamListener):
@@ -56,7 +56,7 @@ class MyStreamListener(tweepy.StreamListener):
 					tweets = tweets_for_username(username_to_tweet_like,api)
 					tweet_type = get_tweet_type(status.text)
 					if tweet_type == "Invalid":
-						send_error_message()
+						send_error_message(status.user.id)
 					else:
 						new_tweet = "If you're seeing this text, something is wrong."
 						if tweet_type == "Standard":
@@ -76,7 +76,7 @@ class MyStreamListener(tweepy.StreamListener):
 					
 						print "Tweeting: %s" % full_tweet
 				else:
-					send_error_message()
+					send_error_message(status.user.id)
 				
 			
 			
