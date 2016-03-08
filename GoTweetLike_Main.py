@@ -34,6 +34,11 @@ my_username = "@GoTweetLike"
 already_done = []
 	
 
+#Send Error Message
+def send_error_message():
+	print "Invalid Request"
+	api.send_direct_message(status.user.id,"Sorry, the format of your tweet was invalid. Please see the usage instructions. If there are no usage instructions yet, be patient. I'm still in development!")
+
 #Define Listener
 class MyStreamListener(tweepy.StreamListener):
 	def on_status(self, status):
@@ -51,8 +56,7 @@ class MyStreamListener(tweepy.StreamListener):
 					tweets = tweets_for_username(username_to_tweet_like,api)
 					tweet_type = get_tweet_type(status.text)
 					if tweet_type == "Invalid":
-						print "Invalid Request"
-						api.send_direct_message(status.user.id,"Sorry, the format of your tweet was invalid. Please see the usage instructions. If there are no usage instructions yet, be patient. I'm still in development!")
+						send_error_message()
 					else:
 						new_tweet = "If you're seeing this text, something is wrong."
 						if tweet_type == "Standard":
@@ -71,6 +75,8 @@ class MyStreamListener(tweepy.StreamListener):
 						api.update_status(status=full_tweet,in_reply_to_status_id=status.id)
 					
 						print "Tweeting: %s" % full_tweet
+				else:
+					send_error_message()
 				
 			
 			
