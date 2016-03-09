@@ -1,5 +1,5 @@
 # @GoTweetLike
-A twitter bot that tweets like people! https://twitter.com/gotweetlike
+A twitter bot that tweets like people! https://twitter.com/GoTweetLike
 
 ## Usage
 
