@@ -78,7 +78,8 @@ class MyStreamListener(tweepy.StreamListener):
 						
 						#Follow both users
 						api.create_friendship(tweeter_screen_name)
-						api.create_friendship(username_to_tweet_like)
+						if username_to_tweet_like.lower() != my_username.lower():
+							api.create_friendship(username_to_tweet_like)
 				else:
 					if status.text.lower().startswith("@gotweetlike"):
 						send_error_message(status.user.id)
