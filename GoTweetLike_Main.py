@@ -30,7 +30,7 @@ api = tweepy.API(auth)
 
 print "Twitter API Authenticated"
 
-my_username = "@GoTweetLike"
+my_username = "GoTweetLike"
 
 already_done = []
 	
