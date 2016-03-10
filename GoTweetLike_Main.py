@@ -47,6 +47,7 @@ class MyStreamListener(tweepy.StreamListener):
 		if status.id not in already_done:
 			already_done.append(status.id)
 			if status.user.id != "706605179911602176" and status.is_quote_status == False and status.retweeted == False:
+				print "Processing tweet: %s" % status.text
 				user_mentions = status._json["entities"]["user_mentions"]
 				if len(user_mentions) >= 2:
 					tweeter_screen_name = status.user.screen_name
