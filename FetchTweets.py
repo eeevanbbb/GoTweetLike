@@ -19,6 +19,7 @@ def sanitize_tweets(tweets):
 	return sanitized
 
 #Fetch tweets
+#Credit: https://gist.github.com/yanofsky/5436496
 def tweets_for_username(username,api):
 	filepath = 'tweets/%s_tweets.csv' % username
 	if not os.path.isfile(filepath):

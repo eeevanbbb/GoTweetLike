@@ -41,6 +41,7 @@ def send_error_message(user_id):
 	#api.send_direct_message(user_id,text="Sorry, the format of your tweet was invalid. Please see the usage instructions here: https://github.com/eeevanbbb/GoTweetLike")
 
 #Define Listener
+#Credit to: https://github.com/benmckibben/Twanslate/blob/master/Twanslate.py
 class MyStreamListener(tweepy.StreamListener):
 	def on_status(self, status):
 		if status.id not in already_done:
