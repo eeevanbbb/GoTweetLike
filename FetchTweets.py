@@ -8,9 +8,11 @@ import tweepy
 
 #Sanitize Tweets
 def sanitize_tweet(tweet):
-	without_url = re.sub(r"(?:\@|https?\://)\S+", "", tweet)
-# 	lower_case = without_url.lower()
-	return without_url
+	clean = re.sub(r"(?:\@|https?\://)\S+", "", tweet) #remove URLS
+	clean = clean.replace("&amp;","&")
+	clean = clean.replace("&lt;","<")
+	clean = clean.replace("&gt;",">")
+	return clean
 	
 def sanitize_tweets(tweets):
 	sanitized = []

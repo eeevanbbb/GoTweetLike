@@ -6,12 +6,14 @@ from random import randint
 import operator
 
 control_string = "***///END///***"
+begin_control_string = "***///BEGIN///***"
+regex_pattern = "(#*\w[\w']*\w\.?|\w\.?|\&)" #Allow for hashtags, contractions, periods, and ampersands
 
 #Analysis and Generation
 def get_successor_histagram(tweets):
 	dict = {}
 	for tweet in tweets:
-		rgx = re.compile("(#*\w[\w']*\w\.?|\w\.?)")
+		rgx = re.compile(regex_pattern)
 		words = rgx.findall(tweet)
 		for i in range(0,len(words)):
 			word = words[i]
@@ -28,6 +30,27 @@ def get_successor_histagram(tweets):
 					successor_dict[next_word] = 1
 	return dict
 	
+def get_predecessor_histagram(tweets):
+	dict = {}
+	for tweet in tweets:
+		rgx = re.compile(regex_pattern)
+		words = rgx.findall(tweet)
+		for i in range(1,len(words)+1):
+			word = words[len(words)-i]
+			previous_word = begin_control_string
+			if i < len(words):
+				previous_word = words[len(words)-(i+1)]
+			if word != "" and previous_word != "":
+				if word not in dict:
+					dict[word] = {}
+				predecessor_dict = dict[word]
+				if previous_word in predecessor_dict:
+					predecessor_dict[previous_word] += 1
+				else:
+					predecessor_dict[previous_word] = 1
+	return dict
+			
+				
 	
 def choice_from_weighted_dict(dict):
 	total = 0
@@ -88,25 +111,62 @@ def random_string_with_length(length,tweets):
 	seed = choice_from_weighted_dict(get_starting_word_histagram(tweets))
 	return random_string_from_seed_with_length(seed,length,tweets)
 	
-def generate_tweet_with_max_char_length_and_seed(char_length,seed,tweets):
-	string = seed
+def generate_tweet_with_max_char_length(char_length,tweets):
 	should_continue = True
-	last_word = seed
-	next_word = get_next_word(last_word,tweets)
+	current_word = choice_from_weighted_dict(get_starting_word_histagram(tweets))
+	next_word = get_next_word(current_word,tweets)
+	string = current_word
 	while len(string) + len(next_word) + 1 <= char_length and should_continue:
 		if next_word != "":
 			string += " "
 			string += next_word
-			last_word = next_word
-			next_word = get_next_word(last_word,tweets)
+			current_word = next_word
+			next_word = get_next_word(current_word,tweets)
 		else:
 			should_continue = False
 	return string
 	
-def generate_tweet_with_max_char_length(char_length,tweets):
-	seed = choice_from_weighted_dict(get_starting_word_histagram(tweets))
-	return generate_tweet_with_max_char_length_and_seed(char_length,seed,tweets)
+def get_previous_word(word,tweets):
+	predecessor_histagram = get_predecessor_histagram(tweets)
+	if word not in predecessor_histagram:
+		return ""
+	else:
+		predecessor_dict = predecessor_histagram[word]
+		previous_word = choice_from_weighted_dict(predecessor_dict)
+		if previous_word == begin_control_string:
+			return ""
+		else:
+			return previous_word
 
+def generate_tweet_about_topic_with_max_char_length(topic,char_length,tweets):
+	#First, go backward
+	string = topic
+	should_continue = True
+	current_word = topic
+	previous_word = get_previous_word(current_word,tweets)
+	while len(string) + len(previous_word) + 1 <= char_length and should_continue:
+		if previous_word != "":
+			string = previous_word + " " + string
+			current_word = previous_word
+			previous_word = get_previous_word(current_word,tweets)
+		else:
+			should_continue = False
+	
+	#Then, go forward
+	should_continue = True
+	current_word = topic
+	next_word = get_next_word(current_word,tweets)
+	while len(string) + len(next_word) + 1 <= char_length and should_continue:
+		if next_word != "":
+			string += " "
+			string += next_word
+			current_word = next_word
+			next_word = get_next_word(current_word,tweets)
+		else:
+			should_continue = False
+	
+	return string
+	
 
 #Stats
 def generate_simple_frequency_table(tweets):

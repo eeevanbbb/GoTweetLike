@@ -5,7 +5,7 @@ import tweepy
 import time
 from FetchTweets import tweets_for_username
 from AnalyzeText import generate_tweet_with_max_char_length
-from AnalyzeText import generate_tweet_with_max_char_length_and_seed
+from AnalyzeText import generate_tweet_about_topic_with_max_char_length
 from RequestParser import get_tweet_type
 from AnalyzeText import generate_stats_for_tweets
 
@@ -66,7 +66,7 @@ class MyStreamListener(tweepy.StreamListener):
 							new_tweet = generate_tweet_with_max_char_length(max_chars,tweets)
 						elif tweet_type.startswith("Topic:"):
 							topic = tweet_type.split()[1]
-							new_tweet = generate_tweet_with_max_char_length_and_seed(max_chars,topic,tweets)
+							new_tweet = generate_tweet_about_topic_with_max_char_length(topic,max_chars,tweets)
 							if new_tweet == topic:
 								#The topic was not in the frequency table
 								new_tweet = "I have nothing to say about " + topic
