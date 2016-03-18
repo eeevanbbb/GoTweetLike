@@ -189,16 +189,48 @@ def get_most_frequent_word(table):
 def get_average_number_of_words(tweets):
 	total = 0
 	for tweet in tweets:
-		rgx = re.compile("(#*\w[\w']*\w\.?|\w\.?)")
+		rgx = re.compile(regex_pattern)
 		words = rgx.findall(tweet)
 		total += len(words)
 	return float(total) / float(len(tweets))
-		
 
 def generate_stats_for_tweets(tweets):
 	table = generate_simple_frequency_table(tweets)
 	most_frequent_word = get_most_frequent_word(table)
 	stats_string = "From %d tweets, the most common word was \"%s\" (%d)." % (len(tweets), most_frequent_word, table[most_frequent_word])
-	stats_string += " Average %f words per tweet." % get_average_number_of_words(tweets)
+	stats_string += " Average %.1f words per tweet." % get_average_number_of_words(tweets)
 	return stats_string
+
+
+def get_most_common_word_pairing(tweets):
+	successor_histagram = get_successor_histagram(tweets)
+	most = 0
+	most_first_word = ""
+	most_second_word = ""
+	for first_word in successor_histagram:
+		frequency_dict = successor_histagram[first_word]
+		for second_word in frequency_dict:
+			frequency = frequency_dict[second_word]
+			if frequency > most and second_word != control_string:
+				most = frequency
+				most_first_word = first_word
+				most_second_word = second_word
+	return "\"" + most_first_word + " " + most_second_word	+ "\" (" + str(most) + ")"
 	
+def get_average_letters_per_word(tweets):
+	letter_count = 0
+	word_count = 0
+	for tweet in tweets:
+		rgx = re.compile(regex_pattern)
+		words = rgx.findall(tweet)
+		word_count += len(words)
+		for word in words:
+			letter_count += len(word)
+	return float(letter_count) / float(word_count)
+
+	
+def generate_advanced_stats_for_tweets(tweets):
+	stats_string = "Analyzed %d tweets." % len(tweets)	
+	stats_string += " Most common word pairing: %s." % get_most_common_word_pairing(tweets)
+	stats_string += " Average %.1f letters per word." % get_average_letters_per_word(tweets)
+	return stats_string

@@ -8,6 +8,7 @@ from AnalyzeText import generate_tweet_with_max_char_length
 from AnalyzeText import generate_tweet_about_topic_with_max_char_length
 from RequestParser import get_tweet_type
 from AnalyzeText import generate_stats_for_tweets
+from AnalyzeText import generate_advanced_stats_for_tweets
 
 print "Server start at " + str(time.clock())
 
@@ -72,9 +73,18 @@ class MyStreamListener(tweepy.StreamListener):
 								new_tweet = "I have nothing to say about " + topic
 						elif tweet_type == "Stats":
 							new_tweet = generate_stats_for_tweets(tweets)
+						elif tweet_type == "AdvancedStats":
+							new_tweet = generate_advanced_stats_for_tweets(tweets)
 							
 							
 						full_tweet = "@%s @%s: %s" % (tweeter_screen_name, username_to_tweet_like, new_tweet)
+						
+						#Catchall
+						if len(full_tweet) > 140:
+							print "TWEET TOO LONG: %s" % full_tweet
+							full_tweet = "Uh oh. Something went wrong and the tweet was too long. Sorry about that!"
+						
+						#Send the tweet
 						api.update_status(status=full_tweet,in_reply_to_status_id=status.id)
 						print "Tweeting: %s" % full_tweet
 						

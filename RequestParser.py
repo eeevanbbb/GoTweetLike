@@ -10,6 +10,8 @@ def get_tweet_type(tweet):
 			return "Stats"
 		elif len(words) == 4 and words[2].lower() == "about":
 			return "Topic: " + words[3]
+		elif len(words) == 4 and words[2].lower() == "advanced" and words[3].lower() == "stats":
+			return "AdvancedStats"
 		else:
 			return "Standard"
 	
