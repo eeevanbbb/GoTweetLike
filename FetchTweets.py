@@ -12,6 +12,7 @@ def sanitize_tweet(tweet):
 	clean = clean.replace("&amp;","&")
 	clean = clean.replace("&lt;","<")
 	clean = clean.replace("&gt;",">")
+	clean = clean.replace("’","'")
 	return clean
 	
 def sanitize_tweets(tweets):
