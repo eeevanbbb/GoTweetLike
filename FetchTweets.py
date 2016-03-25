@@ -13,6 +13,9 @@ def sanitize_tweet(tweet):
 	clean = clean.replace("&lt;","<")
 	clean = clean.replace("&gt;",">")
 	clean = clean.replace("’","'")
+	#Remove initial whitespace (generally from the first word(s) being scrubbed)
+	if len(clean) >= 1 and clean[0] == " ":
+		clean = clean[1:]
 	return clean
 	
 def sanitize_tweets(tweets):
