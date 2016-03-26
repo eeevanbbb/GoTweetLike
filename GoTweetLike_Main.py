@@ -57,13 +57,16 @@ class MyStreamListener(tweepy.StreamListener):
 					
 					#Generate and send tweet
 					max_chars = 140 - (len(tweeter_screen_name) + len(username_to_tweet_like) + 5)
-					tweets = tweets_for_username(username_to_tweet_like,api)
+					tweets = tweets_for_username(username_to_tweet_like,api,False)
 					tweet_type = get_tweet_type(status.text)
 					if tweet_type == "Invalid":
 						send_error_message(status.user.id)
 					else:
 						new_tweet = "If you're seeing this text, something is wrong."
 						if tweet_type == "Standard":
+							new_tweet = generate_tweet_with_max_char_length(max_chars,tweets)
+						elif tweet_type == "Update":
+							tweets = tweets_for_username(username_to_tweet_like,api,True)
 							new_tweet = generate_tweet_with_max_char_length(max_chars,tweets)
 						elif tweet_type.startswith("Topic:"):
 							topic = tweet_type.split()[1]

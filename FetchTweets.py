@@ -72,7 +72,7 @@ def get_tweets_internal(username,api,newest):
 	return outtweets
 
 #Fetch tweets
-def tweets_for_username(username,api):
+def tweets_for_username(username,api,update):
 	filepath = 'tweets/%s_tweets.csv' % username
 	#If the file does not exist, write one with most recent tweets
 	if not os.path.isfile(filepath):
@@ -87,7 +87,7 @@ def tweets_for_username(username,api):
 	#If the file exists and has not been modified for X time, fetch new tweets and append
 	else:
 		mtime = os.path.getmtime(filepath)
-		if mtime + TIME_BETWEEN_UPDATES < time.time():
+		if update is True or mtime + TIME_BETWEEN_UPDATES < time.time():
 			print "Updating Tweets for " + username
     		#Get id of most recent tweet we have
 			with open('tweets/%s_tweets.csv' % username, 'r+') as f:
