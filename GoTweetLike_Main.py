@@ -28,7 +28,7 @@ class new_out:
         else:
             old_out.write(x)
 
-sys.stdout = new_out
+sys.stdout = new_out()
 
 
 print "Script started"
