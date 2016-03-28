@@ -17,7 +17,7 @@ print "Script started"
 old_f = sys.stdout
 class F:
 	def write(self, x):
-		old_f.write("[%s]   " % time.ctime() + x)
+		old_f.write("[%s]   " % time.ctime() + x + "\n")
 sys.stdout = F()
 
 #Twitter API credentials
