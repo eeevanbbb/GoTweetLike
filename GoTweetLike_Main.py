@@ -11,14 +11,14 @@ from RequestParser import get_tweet_type
 from AnalyzeText import generate_stats_for_tweets
 from AnalyzeText import generate_advanced_stats_for_tweets
 
-print "Script started"
-
 #Prepend time to all log output
 old_f = sys.stdout
 class F:
 	def write(self, x):
-		old_f.write("[%s]   " % time.ctime() + x + "\n")
+		old_f.write("[%s]   %s\n" % (time.ctime(),x))
 sys.stdout = F()
+
+print "Script started"
 
 #Twitter API credentials
 twitter_keys = {}
