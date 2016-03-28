@@ -3,6 +3,7 @@
 
 import tweepy
 import time
+import sys
 from FetchTweets import tweets_for_username
 from AnalyzeText import generate_tweet_with_max_char_length
 from AnalyzeText import generate_tweet_about_topic_with_max_char_length
@@ -10,7 +11,14 @@ from RequestParser import get_tweet_type
 from AnalyzeText import generate_stats_for_tweets
 from AnalyzeText import generate_advanced_stats_for_tweets
 
-print "Server start at " + str(time.clock())
+print "Script started"
+
+#Prepend time to all log output
+old_f = sys.stdout
+class F:
+	def write(self, x):
+		old_f.write("[%s]   " % time.ctime() + x)
+sys.stdout = F()
 
 #Twitter API credentials
 twitter_keys = {}
@@ -115,7 +123,11 @@ def start_server():
 	my_stream_listener = MyStreamListener()
 	my_stream = tweepy.Stream(auth=api.auth, listener=my_stream_listener)
 	print "Creating stream..."
-	my_stream.filter(track=['@GoTweetLike'])
+	try:
+		my_stream.filter(track=['@GoTweetLike'])
+	except AttributeError as e: # ignore error in Tweepy library (see here: https://github.com/tweepy/tweepy/issues/576)
+		print "Caught AttributeError, Restarting server (%s)" % e.message
+		start_server()
 	
 start_server()
 
