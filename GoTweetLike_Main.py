@@ -33,6 +33,12 @@ sys.stdout = new_out()
 
 print "Script started"
 
+#Blacklisted accounts
+blacklisted = []
+with open("BLACKLIST.txt") as blacklist_file:
+	for line in blacklist_file:
+		blacklisted.append(line)
+
 #Twitter API credentials
 twitter_keys = {}
 with open("KEYS.txt") as f:
@@ -75,6 +81,9 @@ class MyStreamListener(tweepy.StreamListener):
 					tweeter_screen_name = status.user.screen_name
 					user_to_tweet_like = user_mentions[1]
 					username_to_tweet_like = user_to_tweet_like["screen_name"]
+					if username_to_tweet_like in blacklisted:
+						print "The user %s is blacklisted" % username_to_tweet_like
+						return
 					
 					#Generate and send tweet
 					max_chars = 140 - (len(tweeter_screen_name) + len(username_to_tweet_like) + 5)
