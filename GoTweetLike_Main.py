@@ -11,12 +11,25 @@ from RequestParser import get_tweet_type
 from AnalyzeText import generate_stats_for_tweets
 from AnalyzeText import generate_advanced_stats_for_tweets
 
-#Prepend time to all log output
-old_f = sys.stdout
-class F:
-	def write(self, x):
-		old_f.write("[%s]   %s\n" % (time.ctime(),x))
-sys.stdout = F()
+
+#Prepend time to all log output (http://stackoverflow.com/questions/4883789/adding-a-datetime-stamp-to-python-print)
+old_out = sys.stdout
+class new_out:
+    nl = True
+
+    def write(self, x):
+        """Write function overloaded."""
+        if x == '\n':
+            old_out.write(x)
+            self.nl = True
+        elif self.nl:
+            old_out.write('[%s] %s' % (time.ctime(), x))
+            self.nl = False
+        else:
+            old_out.write(x)
+
+sys.stdout = new_out
+
 
 print "Script started"
 
