@@ -7,7 +7,7 @@ import operator
 
 control_string = "***///END///***"
 begin_control_string = "***///BEGIN///***"
-regex_pattern = "(#*\w[\w']*\w\.?|\w\.?|\&)" #Allow for hashtags, contractions, periods, and ampersands
+regex_pattern = "(\d{1,2}:\d{2}|[aApP]\.?[mM]\.|#*\w[\w']*\w\.?|\w\.?|\&)" #Allow for time, hashtags, contractions, periods, ampersands
 
 #Analysis and Generation
 def get_successor_histagram(tweets):
