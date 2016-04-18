@@ -4,6 +4,7 @@
 import re
 from random import randint
 import operator
+from nltk.corpus import stopwords
 
 control_string = "***///END///***"
 begin_control_string = "***///BEGIN///***"
@@ -181,10 +182,25 @@ def generate_simple_frequency_table(tweets):
 				table[word] += 1
 	return table
 	
+def is_boring_word(word):
+	return word.lower() in set(stopwords.words('english')) or word == "RT"
+	
+	
 def get_most_frequent_word(table):
 	sorted_vals = sorted(table.items(), key=operator.itemgetter(1))
 	most_frequent = sorted_vals[-1]
-	return most_frequent[0]		
+	return most_frequent[0]
+	
+def get_most_frequent_nontrivial_word(table):
+	sorted_vals = sorted(table.items(), key=operator.itemgetter(1))
+	true_most_frequent = sorted_vals[-1]
+	best_most_frequent = sorted_vals[-1]
+	while is_boring_word(best_most_frequent[0]) and len(sorted_vals) > 0:
+		sorted_vals.pop()
+		best_most_frequent = sorted_vals[-1]
+	if len(sorted_vals) == 0:
+		return true_most_frequent #If the words are all boring, return the most used one
+	return best_most_frequent[0]
 
 def get_average_number_of_words(tweets):
 	total = 0
@@ -217,6 +233,21 @@ def get_most_common_word_pairing(tweets):
 				most_second_word = second_word
 	return "\"" + most_first_word + " " + most_second_word	+ "\" (" + str(most) + ")"
 	
+def get_most_common_nontrivial_word_pairing(tweets):
+	successor_histagram = get_successor_histagram(tweets)
+	most = 0
+	most_first_word = ""
+	most_second_word = ""
+	for first_word in successor_histagram:
+		frequency_dict = successor_histagram[first_word]
+		for second_word in frequency_dict:
+			frequency = frequency_dict[second_word]
+			if frequency > most and second_word != control_string and not is_boring_word(first_word):
+				most = frequency
+				most_first_word = first_word
+				most_second_word = second_word
+	return "\"" + most_first_word + " " + most_second_word	+ "\" (" + str(most) + ")"
+	
 def get_average_letters_per_word(tweets):
 	letter_count = 0
 	word_count = 0
@@ -230,7 +261,14 @@ def get_average_letters_per_word(tweets):
 
 	
 def generate_advanced_stats_for_tweets(tweets):
-	stats_string = "Analyzed %d tweets." % len(tweets)	
+	stats_string = "(1/2) Analyzed %d tweets." % len(tweets)	
 	stats_string += " Most common word pairing: %s." % get_most_common_word_pairing(tweets)
 	stats_string += " Average %.1f letters per word." % get_average_letters_per_word(tweets)
+	return stats_string
+	
+def generate_more_advanced_stats_for_tweets(tweets):
+	table = generate_simple_frequency_table(tweets)
+	most_frequent_nontrivial_word = get_most_frequent_nontrivial_word(table)
+	stats_string = "(2/2) Most common non-trivial word: \"%s\". " % get_most_frequent_nontrivial_word(table)
+	stats_string += "Most common non-trivial word pairing: %s." % get_most_common_nontrivial_word_pairing(tweets)
 	return stats_string

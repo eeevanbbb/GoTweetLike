@@ -10,6 +10,7 @@ from AnalyzeText import generate_tweet_about_topic_with_max_char_length
 from RequestParser import get_tweet_type
 from AnalyzeText import generate_stats_for_tweets
 from AnalyzeText import generate_advanced_stats_for_tweets
+from AnalyzeText import generate_more_advanced_stats_for_tweets
 
 
 #Prepend time to all log output (http://stackoverflow.com/questions/4883789/adding-a-datetime-stamp-to-python-print)
@@ -93,6 +94,7 @@ class MyStreamListener(tweepy.StreamListener):
 						send_error_message(status.user.id)
 					else:
 						new_tweet = "If you're seeing this text, something is wrong."
+						second_tweet = None
 						if tweet_type == "Standard":
 							new_tweet = generate_tweet_with_max_char_length(max_chars,tweets)
 						elif tweet_type == "Update":
@@ -108,6 +110,7 @@ class MyStreamListener(tweepy.StreamListener):
 							new_tweet = generate_stats_for_tweets(tweets)
 						elif tweet_type == "AdvancedStats":
 							new_tweet = generate_advanced_stats_for_tweets(tweets)
+							second_tweet = generate_more_advanced_stats_for_tweets(tweets)
 							
 							
 						full_tweet = "@%s @%s: %s" % (tweeter_screen_name, username_to_tweet_like, new_tweet)
@@ -120,6 +123,11 @@ class MyStreamListener(tweepy.StreamListener):
 						#Send the tweet
 						api.update_status(status=full_tweet,in_reply_to_status_id=status.id)
 						print "Tweeting: %s" % full_tweet
+						
+						#Optional: Send a followup tweet
+						if second_tweet is not None:
+							api.update_status(status=second_tweet,in_reply_to_status_id=status.id)
+							print "Tweeting (second tweet): %s" % full_tweet
 						
 						#Follow both users
 						api.create_friendship(tweeter_screen_name)
