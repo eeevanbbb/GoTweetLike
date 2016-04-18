@@ -126,8 +126,9 @@ class MyStreamListener(tweepy.StreamListener):
 						
 						#Optional: Send a followup tweet
 						if second_tweet is not None:
-							api.update_status(status=second_tweet,in_reply_to_status_id=status.id)
-							print "Tweeting (second tweet): %s" % full_tweet
+							full_second_tweet = "@%s @%s: %s" % (tweeter_screen_name, username_to_tweet_like, second_tweet)
+							api.update_status(status=full_second_tweet,in_reply_to_status_id=status.id)
+							print "Tweeting (second tweet): %s" % full_second_tweet
 						
 						#Follow both users
 						api.create_friendship(tweeter_screen_name)

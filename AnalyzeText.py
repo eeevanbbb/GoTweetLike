@@ -269,6 +269,6 @@ def generate_advanced_stats_for_tweets(tweets):
 def generate_more_advanced_stats_for_tweets(tweets):
 	table = generate_simple_frequency_table(tweets)
 	most_frequent_nontrivial_word = get_most_frequent_nontrivial_word(table)
-	stats_string = "(2/2) Most common non-trivial word: \"%s\". " % get_most_frequent_nontrivial_word(table)
+	stats_string = "(2/2) Most common non-trivial word: \"%s\" (%d). " % (get_most_frequent_nontrivial_word(table), table[most_frequent_nontrivial_word])
 	stats_string += "Most common non-trivial word pairing: %s." % get_most_common_nontrivial_word_pairing(tweets)
 	return stats_string
