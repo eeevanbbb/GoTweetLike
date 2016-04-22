@@ -261,15 +261,12 @@ def get_average_letters_per_word(tweets):
 
 	
 def generate_advanced_stats_for_tweets(tweets):
-	stats_string = "(1/2) Analyzed %d tweets." % len(tweets)	
-	stats_string += " Most common word pairing: %s." % get_most_common_word_pairing(tweets)
-	stats_string += " Average %.1f letters per word." % get_average_letters_per_word(tweets)
-	return stats_string
-	
-def generate_more_advanced_stats_for_tweets(tweets):
 	table = generate_simple_frequency_table(tweets)
 	most_frequent_nontrivial_word = get_most_frequent_nontrivial_word(table)
-	stats_string = "(2/2) Most common non-trivial word: \"%s\" (%d). " % (get_most_frequent_nontrivial_word(table), table[most_frequent_nontrivial_word])
+	stats_string = "Analyzed %d tweets." % len(tweets)	
+	stats_string += " Most common word pairing: %s." % get_most_common_word_pairing(tweets)
+	stats_string += " Average %.1f letters per word." % get_average_letters_per_word(tweets)
+	stats_string += " Most common non-trivial word: \"%s\" (%d). " % (get_most_frequent_nontrivial_word(table), table[most_frequent_nontrivial_word])
 	stats_string += "Most common non-trivial word pairing: %s." % get_most_common_nontrivial_word_pairing(tweets)
 	return stats_string
 	
@@ -291,10 +288,16 @@ def get_longest_word_tweet_for_tweets(tweets):
 	longestWords = get_longest_words(tweets)
 	if len(longestWords) == 0:
 		stats_string = "Uh oh! Something went wrong. @EvanSaysHello needs to fix me."
-	elif len(longestWords) == 1:
-		stats_string = "From %d tweets, the longest word was \"%s\" (%d letters)." % (len(tweets), longestWords[0], len(longestWords[0]))
-	elif len(longestWords) == 2:
-		stats_string = "From %d tweets, the longest words were \"%s\" and \"%s\" (%d letters)." % (len(tweets), longestWords[0], longestWords[1], len(longestWords[0]))	
 	else:
-		stats_string = "From %d tweets, there were %d words that were each %d letters long!" % (len(tweets), len(longestWords), len(longestWords[0]))
+		stats_string = "From %d tweets," % len(tweets)
+		if len(longestWords) == 1:
+			stats_string += " the longest word was \"%s\" (%d letters)." % (longestWords[0], len(longestWords[0]))
+		else:
+			stats_string += " there were %d %d-letter words:" % (len(longestWords),len(longestWords[0]))
+			for word in longestWords:
+				if word == longestWords[-1]:
+					stats_string += " and"
+				stats_string += " \"%s\"" % word
+				if len(longestWords) != 2 and word != longestWords[-1]:
+					stats_string += ","
 	return stats_string
