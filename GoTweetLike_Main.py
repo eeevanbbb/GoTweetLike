@@ -135,7 +135,7 @@ class MyStreamListener(tweepy.StreamListener):
 							overheadLength = addressLength + countLength
 							maxTextLength = 140 - overheadLength
 							tweetNumber = 0
-							totalTweets = Int(math.ceil(float(len(new_tweet)) / float(maxTextLength)))
+							totalTweets = int(math.ceil(float(len(new_tweet)) / float(maxTextLength)))
 							while len(new_tweet) > 0:
 								tweetNumber += 1
 								partialTweet = address + "(%d/%d) " % (tweetNumber,totalTweets) + new_tweet[:maxTextLength]
