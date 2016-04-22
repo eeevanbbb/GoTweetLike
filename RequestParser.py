@@ -12,7 +12,7 @@ def get_tweet_type(tweet):
 			return "Update"
 		elif len(words) == 4 and words[2].lower() == "about":
 			return "Topic: " + words[3]
-		elif len(words) >= 4 and (words[2].lower() == "advanced" || words[2].lower() == "more") and words[3].lower() == "stats":
+		elif len(words) >= 4 and (words[2].lower() == "advanced" or words[2].lower() == "more") and words[3].lower() == "stats":
 			return "AdvancedStats"
 		elif len(words) >= 4 and words[2].lower() == "longest" and (words[3].lower() == "word" or words[3].lower() == "words"):
 			return "LongestWord"
