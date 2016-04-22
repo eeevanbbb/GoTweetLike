@@ -11,6 +11,7 @@ from RequestParser import get_tweet_type
 from AnalyzeText import generate_stats_for_tweets
 from AnalyzeText import generate_advanced_stats_for_tweets
 from AnalyzeText import generate_more_advanced_stats_for_tweets
+from AnalyzeText import get_longest_word_tweet_for_tweets
 
 
 #Prepend time to all log output (http://stackoverflow.com/questions/4883789/adding-a-datetime-stamp-to-python-print)
@@ -111,6 +112,8 @@ class MyStreamListener(tweepy.StreamListener):
 						elif tweet_type == "AdvancedStats":
 							new_tweet = generate_advanced_stats_for_tweets(tweets)
 							second_tweet = generate_more_advanced_stats_for_tweets(tweets)
+						elif tweet_type == "LongestWord":
+							new_tweet = get_longest_word_tweet_for_tweets(tweets)
 							
 							
 						full_tweet = "@%s @%s: %s" % (tweeter_screen_name, username_to_tweet_like, new_tweet)

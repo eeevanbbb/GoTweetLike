@@ -272,3 +272,29 @@ def generate_more_advanced_stats_for_tweets(tweets):
 	stats_string = "(2/2) Most common non-trivial word: \"%s\" (%d). " % (get_most_frequent_nontrivial_word(table), table[most_frequent_nontrivial_word])
 	stats_string += "Most common non-trivial word pairing: %s." % get_most_common_nontrivial_word_pairing(tweets)
 	return stats_string
+	
+def get_longest_words(tweets):
+	length = 0
+	longest = []
+	for tweet in tweets:
+		rgx = re.compile(regex_pattern)
+		words = rgx.findall(tweet)	
+		for word in words:
+			if len(word) > length:
+				length = len(word)
+				longest = [word]
+			elif len(word) == length:
+				longest.append(word)
+	return longest
+
+def get_longest_word_tweet_for_tweets(tweets):
+	longestWords = get_longest_words(tweets)
+	if len(longestWords) == 0:
+		stats_string = "Uh oh! Something went wrong. @EvanSaysHello needs to fix me."
+	elif len(longestWords) == 1:
+		stats_string = "From %d tweets, the longest word was \"%s\" (%d letters)." % (len(tweets), longestWords[0], len(longestWords[0]))
+	elif len(longestWords) == 2:
+		stats_string = "From %d tweets, the longest words were \"%s\" and \"%s\" (%d letters)." % (len(tweets), longestWords[0], longestWords[1], len(longestWords[0]))	
+	else:
+		stats_string = "From %d tweets, there were %d words that were each %d letters long!" % (len(tweets), len(longestWords), len(longestWords[0]))
+	return stats_string

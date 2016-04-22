@@ -7,6 +7,7 @@ A twitter bot that tweets like people! https://twitter.com/GoTweetLike
 * @GoTweetLike @AnyUsername about AnyTopic   ---   If that user has tweeted about that topic before, bot will reply with a tweet about that topic
 * @GoTweetLike @AnyUsername stats   ---   Bot will reply with some basic stats about that user's tweets
 * @GoTweetLike @AnyUsername advanced stats   ---   Bot will reply with more advanced stats about that user's tweets
+* @GoTweetLike @AnyUsername longest word   ---   Bot will reply with the longest word that user has tweeted
 * @GoTweetLike @AnyUsername update   ---   If the bot has cached tweets for the user, it will update this cache before tweeting
 
 ## About
