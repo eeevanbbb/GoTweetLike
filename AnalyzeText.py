@@ -277,10 +277,10 @@ def get_longest_words(tweets):
 		rgx = re.compile(regex_pattern)
 		words = rgx.findall(tweet)	
 		for word in words:
-			if len(word) > length:
+			if len(word) > length and word[0] != "#":
 				length = len(word)
 				longest = [word]
-			elif len(word) == length:
+			elif len(word) == length and word[0] != "#":
 				longest.append(word)
 	return longest
 
