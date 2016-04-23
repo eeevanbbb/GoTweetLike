@@ -263,11 +263,15 @@ def get_average_letters_per_word(tweets):
 def generate_advanced_stats_for_tweets(tweets):
 	table = generate_simple_frequency_table(tweets)
 	most_frequent_nontrivial_word = get_most_frequent_nontrivial_word(table)
+	most_common_word_pairing = get_most_common_word_pairing(tweets)
+	most_common_nontrivial_word_pairing = get_most_common_nontrivial_word_pairing(tweets)
 	stats_string = "Analyzed %d tweets." % len(tweets)	
-	stats_string += " Most common word pairing: %s." % get_most_common_word_pairing(tweets)
+	stats_string += " Most common word pairing: %s." % most_common_word_pairing
 	stats_string += " Average %.1f letters per word." % get_average_letters_per_word(tweets)
-	stats_string += " Most common non-trivial word: \"%s\" (%d). " % (get_most_frequent_nontrivial_word(table), table[most_frequent_nontrivial_word])
-	stats_string += "Most common non-trivial word pairing: %s." % get_most_common_nontrivial_word_pairing(tweets)
+	if most_frequent_nontrivial_word != get_most_frequent_word(table):
+		stats_string += " Most common non-trivial word: \"%s\" (%d). " % (most_frequent_nontrivial_word, table[most_frequent_nontrivial_word])
+	if most_common_word_pairing != most_common_nontrivial_word_pairing:
+		stats_string += "Most common non-trivial word pairing: %s." % most_common_nontrivial_word_pairing
 	return stats_string
 	
 def get_longest_words(tweets):
