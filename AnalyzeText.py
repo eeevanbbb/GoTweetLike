@@ -30,7 +30,7 @@ def get_successor_histagram(tweets):
 				else:
 					successor_dict[next_word] = 1
 	return dict
-	
+
 def get_predecessor_histagram(tweets):
 	dict = {}
 	for tweet in tweets:
@@ -50,9 +50,9 @@ def get_predecessor_histagram(tweets):
 				else:
 					predecessor_dict[previous_word] = 1
 	return dict
-			
-				
-	
+
+
+
 def choice_from_weighted_dict(dict):
 	total = 0
 	for word, freq in dict.iteritems():
@@ -60,12 +60,12 @@ def choice_from_weighted_dict(dict):
 	random_int = randint(0,total)
 	upto = 0
 	for word, freq in dict.iteritems():
-		if upto + freq >= random_int:	
+		if upto + freq >= random_int:
 			return word
 		upto += freq
-	assert False, "Random Int Too High"		
+	assert False, "Random Int Too High"
 
-	
+
 def get_next_word(word,tweets):
 	successor_histagram = get_successor_histagram(tweets)
 	if word not in successor_histagram:
@@ -77,8 +77,8 @@ def get_next_word(word,tweets):
 			return ""
 		else:
 			return next_word
-				
-	
+
+
 def random_string_from_seed_with_length(seed,length,tweets):
 	running_length = 1
 	string = seed
@@ -94,7 +94,7 @@ def random_string_from_seed_with_length(seed,length,tweets):
 		else:
 			should_continue = False
 	return string
-	
+
 def get_starting_word_histagram(tweets):
 	dict = {}
 	for tweet in tweets:
@@ -111,7 +111,7 @@ def get_starting_word_histagram(tweets):
 def random_string_with_length(length,tweets):
 	seed = choice_from_weighted_dict(get_starting_word_histagram(tweets))
 	return random_string_from_seed_with_length(seed,length,tweets)
-	
+
 def generate_tweet_with_max_char_length(char_length,tweets):
 	should_continue = True
 	current_word = choice_from_weighted_dict(get_starting_word_histagram(tweets))
@@ -126,7 +126,7 @@ def generate_tweet_with_max_char_length(char_length,tweets):
 		else:
 			should_continue = False
 	return string
-	
+
 def get_previous_word(word,tweets):
 	predecessor_histagram = get_predecessor_histagram(tweets)
 	if word not in predecessor_histagram:
@@ -152,7 +152,7 @@ def generate_tweet_about_topic_with_max_char_length(topic,char_length,tweets):
 			previous_word = get_previous_word(current_word,tweets)
 		else:
 			should_continue = False
-	
+
 	#Then, go forward
 	should_continue = True
 	current_word = topic
@@ -165,9 +165,9 @@ def generate_tweet_about_topic_with_max_char_length(topic,char_length,tweets):
 			next_word = get_next_word(current_word,tweets)
 		else:
 			should_continue = False
-	
+
 	return string
-	
+
 
 #Stats
 def generate_simple_frequency_table(tweets):
@@ -181,16 +181,16 @@ def generate_simple_frequency_table(tweets):
 			else:
 				table[word] += 1
 	return table
-	
+
 def is_boring_word(word):
 	return word.lower() in set(stopwords.words('english')) or word == "RT"
-	
-	
+
+
 def get_most_frequent_word(table):
 	sorted_vals = sorted(table.items(), key=operator.itemgetter(1))
 	most_frequent = sorted_vals[-1]
 	return most_frequent[0]
-	
+
 def get_most_frequent_nontrivial_word(table):
 	sorted_vals = sorted(table.items(), key=operator.itemgetter(1))
 	true_most_frequent = sorted_vals[-1]
@@ -232,7 +232,7 @@ def get_most_common_word_pairing(tweets):
 				most_first_word = first_word
 				most_second_word = second_word
 	return "\"" + most_first_word + " " + most_second_word	+ "\" (" + str(most) + ")"
-	
+
 def get_most_common_nontrivial_word_pairing(tweets):
 	successor_histagram = get_successor_histagram(tweets)
 	most = 0
@@ -247,7 +247,7 @@ def get_most_common_nontrivial_word_pairing(tweets):
 				most_first_word = first_word
 				most_second_word = second_word
 	return "\"" + most_first_word + " " + most_second_word	+ "\" (" + str(most) + ")"
-	
+
 def get_average_letters_per_word(tweets):
 	letter_count = 0
 	word_count = 0
@@ -259,13 +259,13 @@ def get_average_letters_per_word(tweets):
 			letter_count += len(word)
 	return float(letter_count) / float(word_count)
 
-	
+
 def generate_advanced_stats_for_tweets(tweets):
 	table = generate_simple_frequency_table(tweets)
 	most_frequent_nontrivial_word = get_most_frequent_nontrivial_word(table)
 	most_common_word_pairing = get_most_common_word_pairing(tweets)
 	most_common_nontrivial_word_pairing = get_most_common_nontrivial_word_pairing(tweets)
-	stats_string = "Analyzed %d tweets." % len(tweets)	
+	stats_string = "Analyzed %d tweets." % len(tweets)
 	stats_string += " Most common word pairing: %s." % most_common_word_pairing
 	stats_string += " Average %.1f letters per word." % get_average_letters_per_word(tweets)
 	if most_frequent_nontrivial_word != get_most_frequent_word(table):
@@ -273,18 +273,18 @@ def generate_advanced_stats_for_tweets(tweets):
 	if most_common_word_pairing != most_common_nontrivial_word_pairing:
 		stats_string += "Most common non-trivial word pairing: %s." % most_common_nontrivial_word_pairing
 	return stats_string
-	
+
 def get_longest_words(tweets):
 	length = 0
 	longest = []
 	for tweet in tweets:
 		rgx = re.compile(regex_pattern)
-		words = rgx.findall(tweet)	
+		words = rgx.findall(tweet)
 		for word in words:
 			if len(word) > length and word[0] != "#":
 				length = len(word)
 				longest = [word]
-			elif len(word) == length and word[0] != "#":
+			elif len(word) == length and word[0] != "#" and word.lower() not in longest:
 				longest.append(word)
 	return longest
 
