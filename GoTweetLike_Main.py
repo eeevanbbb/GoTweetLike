@@ -118,9 +118,9 @@ class MyStreamListener(tweepy.StreamListener):
 
 
                         address = "@%s @%s: " % (tweeter_screen_name, username_to_tweet_like)
-						full_tweet = address + new_tweet
+                        full_tweet = address + new_tweet
 
-						outgoing_tweets = []
+                        outgoing_tweets = []
 
 						#Okay, this will take some explaining
 						#If the full tweet is <= 140 chars, perfect, we're done
