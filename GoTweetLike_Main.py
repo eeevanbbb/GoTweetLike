@@ -117,7 +117,7 @@ class MyStreamListener(tweepy.StreamListener):
                             new_tweet = generate_rant(600,1000,tweets) #min = 600, max = 1000 chars
 
 
-						address = "@%s @%s: " % (tweeter_screen_name, username_to_tweet_like)
+                        address = "@%s @%s: " % (tweeter_screen_name, username_to_tweet_like)
 						full_tweet = address + new_tweet
 
 						outgoing_tweets = []
