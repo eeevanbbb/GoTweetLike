@@ -305,3 +305,27 @@ def get_longest_word_tweet_for_tweets(tweets):
 				if len(longestWords) != 2 and word != longestWords[-1]:
 					stats_string += ","
 	return stats_string
+
+
+def generate_rant(min_char_length,max_char_length,tweets):
+	string = ""
+	while len(string) < min_char_length:
+		#Make sure each section ends with a period and a space.
+		if string != "":
+			if not string.endswith("."):
+				string += "."
+			string += " "
+
+		should_continue = True
+		current_word = choice_from_weighted_dict(get_starting_word_histagram(tweets))
+		next_word = get_next_word(current_word,tweets)
+		string += current_word
+		while len(string) + len(next_word) + 1 <= max_char_length and should_continue:
+			if next_word != "":
+				string += " "
+				string += next_word
+				current_word = next_word
+				next_word = get_next_word(current_word,tweets)
+			else:
+				should_continue = False
+	return string

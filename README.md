@@ -8,6 +8,7 @@ A twitter bot that tweets like people! https://twitter.com/GoTweetLike
 * @GoTweetLike @AnyUsername stats   ---   Bot will reply with some basic stats about that user's tweets
 * @GoTweetLike @AnyUsername advanced stats   ---   Bot will reply with more advanced stats about that user's tweets
 * @GoTweetLike @AnyUsername longest word   ---   Bot will reply with the longest word that user has tweeted
+* @GoTweetLike @AnyUsername rant   ---   Bot will reply with a numbered series of tweets in the style of that user
 * @GoTweetLike @AnyUsername update   ---   If the bot has cached tweets for the user, it will update this cache before tweeting
 
 ## About
@@ -26,10 +27,10 @@ Tweets are cached once downloaded, and new tweets are added at most daily (when 
 
 * Right now, @GoTweetLike only looks at the one previous word when reasoning about the next word. It could be smarter!
 
-* Right now, @GoTweetLike tries to end tweets where the user would, but there is a hard limit at 140 characters (minus overhead).
+* Right now, @GoTweetLike is a bit inefficient in the way it generates tweets. Frequency tables can and should be cached for a given tweet.
 
 Notice how these issues all begin with "Right now." This is because @GoTweetLike is being actively developed. Feel free to help! Send a pull request! Send me an email! Send your hacker friend an email!
 
-## Miscellanious
+## Miscellaneous
 
 My personal twitter is @EvanSaysHello. Follow me if you want to be spammed with lots of tweets testing @GoTweetLike as I continue to develop it.

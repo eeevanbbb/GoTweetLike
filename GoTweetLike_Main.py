@@ -12,6 +12,7 @@ from RequestParser import get_tweet_type
 from AnalyzeText import generate_stats_for_tweets
 from AnalyzeText import generate_advanced_stats_for_tweets
 from AnalyzeText import get_longest_word_tweet_for_tweets
+from AnalyzeText import generate_rant
 
 
 #Prepend time to all log output (http://stackoverflow.com/questions/4883789/adding-a-datetime-stamp-to-python-print)
@@ -47,7 +48,7 @@ with open("KEYS.txt") as f:
     for line in f:
         name, var = line.split("=")
         twitter_keys[name.strip()] = var.strip()
-        
+
 consumer_key = twitter_keys["consumer_key"]
 consumer_secret = twitter_keys["consumer_secret"]
 access_key = twitter_keys["access_key"]
@@ -63,7 +64,7 @@ print "Twitter API Authenticated"
 my_username = "GoTweetLike"
 
 already_done = []
-	
+
 
 #Send Error Message
 def send_error_message(user_id):
@@ -86,7 +87,7 @@ class MyStreamListener(tweepy.StreamListener):
 					if username_to_tweet_like in blacklisted:
 						print "The user %s is blacklisted" % username_to_tweet_like
 						return
-					
+
 					#Generate and send tweet
 					max_chars = 140 - (len(tweeter_screen_name) + len(username_to_tweet_like) + 5)
 					tweets = tweets_for_username(username_to_tweet_like,api,False)
@@ -112,13 +113,15 @@ class MyStreamListener(tweepy.StreamListener):
 							new_tweet = generate_advanced_stats_for_tweets(tweets)
 						elif tweet_type == "LongestWord":
 							new_tweet = get_longest_word_tweet_for_tweets(tweets)
-							
-											
-						address = "@%s @%s: " % (tweeter_screen_name, username_to_tweet_like)		
+                        elif tweet_type == "Rant":
+                            new_tweet = generate_rant(600,1000,tweets) #min = 600, max = 1000 chars
+
+
+						address = "@%s @%s: " % (tweeter_screen_name, username_to_tweet_like)
 						full_tweet = address + new_tweet
-						
+
 						outgoing_tweets = []
-						
+
 						#Okay, this will take some explaining
 						#If the full tweet is <= 140 chars, perfect, we're done
 						#Otherwise, we have to divide it up into separate tweets
@@ -126,7 +129,7 @@ class MyStreamListener(tweepy.StreamListener):
 							#As well as an indicator of which tweet it is in the list
 							#This means we have to calculate the overhead beforehand
 							#And divide accordingly, until there are no more chars left
-						
+
 						if len(full_tweet) <= 140:
 							outgoing_tweets.append(full_tweet)
 						else:
@@ -141,13 +144,13 @@ class MyStreamListener(tweepy.StreamListener):
 								partialTweet = address + "(%d/%d) " % (tweetNumber,totalTweets) + new_tweet[:maxTextLength]
 								outgoing_tweets.append(partialTweet)
 								new_tweet = new_tweet[maxTextLength:]
-							
-						
+
+
 						#Send the tweets
 						for outgoing_tweet in outgoing_tweets:
 							api.update_status(status=outgoing_tweet,in_reply_to_status_id=status.id)
 							print "Tweeting: %s" % outgoing_tweet
-						
+
 						#Follow both users
 						api.create_friendship(tweeter_screen_name)
 						if username_to_tweet_like.lower() != my_username.lower():
@@ -155,9 +158,9 @@ class MyStreamListener(tweepy.StreamListener):
 				else:
 					if status.text.lower().startswith("@gotweetlike"):
 						send_error_message(status.user.id)
-				
-			
-			
+
+
+
 	def on_error(self, status_code):
 		print "Error: %d" % status_code
 		if status_code == 420:
@@ -177,11 +180,5 @@ def start_server():
 	except AttributeError as e: # ignore error in Tweepy library (see here: https://github.com/tweepy/tweepy/issues/576)
 		print "Caught AttributeError, Restarting server (%s)" % e.message
 		start_server()
-	
+
 start_server()
-
-
-
-
-
-	
