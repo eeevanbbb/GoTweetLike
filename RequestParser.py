@@ -12,8 +12,8 @@ def get_tweet_type(tweet):
 			return "Stats"
 		elif len(words) >= 3 and words[2].lower() == "update":
 			return "Update"
-		#elif len(words) >= 3 and words[2].lower() == "rant":
-		#	return "Rant"
+		elif len(words) >= 3 and words[2].lower() == "rant":
+			return "Rant"
 		elif len(words) == 4 and words[2].lower() == "about":
 			return "Topic: " + words[3]
 		elif len(words) >= 4 and (words[2].lower() == "advanced" or words[2].lower() == "more") and words[3].lower() == "stats":
@@ -21,8 +21,8 @@ def get_tweet_type(tweet):
 		elif len(words) >= 4 and words[2].lower() == "longest" and (words[3].lower() == "word" or words[3].lower() == "words"):
 			return "LongestWord"
 		#More lenient scanning
-		#elif "rant" in scannableString:
-		#	return "Rant"
+		elif "rant" in scannableString:
+			return "Rant"
 		elif "longest word" in scannableString or "longest words" in scannableString:
 			return "LongestWord"
 		elif "advanced stats" in scannableString or "more stats" in scannableString:
