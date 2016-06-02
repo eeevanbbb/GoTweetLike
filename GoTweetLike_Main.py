@@ -159,10 +159,10 @@ class MyStreamListener(tweepy.StreamListener):
 					else:
 						if status.text.lower().startswith("@gotweetlike"):
 							send_error_message(status.user.id)
-			except tweepy.TweepError, error:
-				print "Catching Error: "
-				print type(error)
-				print str(error)
+		except tweepy.TweepError, error:
+			print "Catching Error: "
+			print type(error)
+			print str(error)
 
 
 
