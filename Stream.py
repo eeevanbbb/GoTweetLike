@@ -45,19 +45,14 @@ class TweetStreamListener(tweepy.StreamListener):
                 elif parsed["type"] == "invalid":
                     if status.in_reply_to_status_id_str is None:
                         reply_tweet = self.generator.generate_reply(parsed["message"], status.user.screen_name)
-                elif parsed["type"] == "standard":
+                elif parsed["type"] in ["standard", "update"]:
                     screen_name_to_tweet_like = parsed["screen_name"]
                     follow.append(screen_name_to_tweet_like)
                     
-                    self.tweet_data.update_tweets_if_necessary(screen_name_to_tweet_like) # blocking
+                    self.tweet_data.update_tweets_if_necessary(screen_name_to_tweet_like, force=parsed["type"] == "update") # blocking
                     tweets = self.tweet_data.tweets(screen_name_to_tweet_like)
 
                     reply_tweet = self.generator.generate_standard_tweet(tweets, status.user.screen_name)
-                elif parsed["type"] == "update":
-                    screen_name_to_tweet_like = parsed["screen_name"]
-                    follow.append(screen_name_to_tweet_like)
-
-                    self.tweet_data.update_tweets_if_necessary(screen_name_to_tweet_like, force=True) # blocking
                 elif parsed["type"] == "combined":
                     screen_names_to_tweet_like = parsed["screen_names"]
                     follow = screen_names_to_tweet_like

@@ -1,14 +1,33 @@
 # @GoTweetLike
 A twitter bot that tweets like people! https://twitter.com/GoTweetLike
 
-## Usage
+## Requirements
 
-* @GoTweetLike @AnyUsername   ---   Bot will reply with a tweet in the style of that user
-* @GoTweetLike @AnyUsername about AnyTopic   ---   If that user has tweeted about that topic before, bot will reply with a tweet about that topic
-* @GoTweetLike @AnyUsername stats   ---   Bot will reply with some basic stats about that user's tweets
-* @GoTweetLike @AnyUsername advanced stats   ---   Bot will reply with more advanced stats about that user's tweets
-* @GoTweetLike @AnyUsername longest word   ---   Bot will reply with the longest word that user has tweeted
-* @GoTweetLike @AnyUsername update   ---   If the bot has cached tweets for the user, it will update this cache before tweeting
+* `python 2.7`
+* TwitterBot credentials
+
+## Installation
+
+`pip install -r requirements.txt`
+
+## Usage (Run the server)
+
+```
+usage: Main.py [-h] [--debug]
+
+Start GoTweetLike.
+
+optional arguments:
+  -h, --help  show this help message and exit
+  --debug     Start the bot in DEBUG mode.
+```
+
+## Usage (Use the bot)
+
+* @GoTweetLike @Username   ---   Bot will reply with a tweet in the style of that user
+* @GoTweetLike @AnyUsername update   ---   The bot will force the cache of tweets for that user to update before tweeting
+* @GoTweetLike help   ---   Bot will reply with instructions about how to use it
+* @GoTweetLike @Username1 @Username2 ... @UsernameN   ---   Bot will reply with a tweet in the combined style of those users
 
 ## About
 
@@ -16,20 +35,18 @@ First and foremost, @GoTweetLike is still very much a work in progress!
 
 Second and secondmost, feel free to send a pull request to help me make it better!
 
-@GoTweetLike works by building a frequency table from a given user's last 3,200 tweets (the maximum amount Twitter's API will allow the bot to fetch), then building a new random sentence based on how likely some words are to follow other words. It has no knowledge of language structure or syntax.
-
-Tweets are cached once downloaded, and new tweets are added at most daily (when the user is requested) or whenever an update is forced (see Usage above)
+@GoTweetLike uses the [markovify](https://github.com/jsvine/markovify) library to create markov models based on a given twitter user's most recent tweets.
 
 ## Known issues
 
-* Right now, @GoTweetLike's analyses are case-sensitive. This can be good, for instance, to give context hints about when words are capitalized (i.e. the beginning of a sentence), but this can also be bad by fracturing the table when capitalization is arbitrary.
+* Some encoded strings may appear in the corpus unescaped.
 
-* Right now, @GoTweetLike only looks at the one previous word when reasoning about the next word. It could be smarter!
+* Unicode not supported.
 
-* Right now, @GoTweetLike is a bit inefficient in the way it generates tweets. Frequency tables can and should be cached for a given tweet.
+* Some features from the old version (e.g. linguistic statistics) were scrapped in the rewrite. They are being rebuilt.
 
-Notice how these issues all begin with "Right now." This is because @GoTweetLike is being actively developed. Feel free to help! Send a pull request! Send me an email! Send your hacker friend an email!
+* Only up to the most recent 3200 tweets are downloaded per user. This is a limitation of the twitter API. Tweets are cached, however, so that a larger corpus can be built up over time.
 
 ## Miscellaneous
 
-My personal twitter is @EvanSaysHello. Follow me if you want to be spammed with lots of tweets testing @GoTweetLike as I continue to develop it.
+My personal twitter is [@EvanSaysHello](https://twitter.com/EvanSaysHello). Follow me if you want to be spammed with lots of tweets testing [@GoTweetLike](https://twitter.com/GoTweetLike) as I continue to develop it.
