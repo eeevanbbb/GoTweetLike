@@ -1,0 +1,2 @@
+tweepy==3.5.0
+markovify==0.6.0
