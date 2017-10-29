@@ -69,7 +69,7 @@ class TweetData(object):
 
                                 tweets_file.seek(0)
 
-                                writer = cvs.writer(tweets_file)
+                                writer = csv.writer(tweets_file)
                                 writer.writerows(new_tweets)
                             else:
                                 print 'Tweets file contains no tweets: ' + filepath
